@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>notebook</title>
+
+    <style>
+
+        *{
+            font-family: comic sans ms !important;
+        }
+
+        body{
+            margin: 10px 50px;
+            align-items: center;
+            
+        }
+
+        div {
+            padding: 5px;
+            margin: 5px;
+        }
+
+        textarea{
+            width:98%;
+            resize: vertical;
+            background-color: aliceblue;
+            border:none;
+            border-bottom: 1px solid  rgb(22, 190, 246);
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 3px 20px;
+            background: white;
+            border: 2px solid darkslategray;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: rgba(62, 155, 237, 0.422);
+        }
+
+        ul{
+            list-style: none;
+            padding: 5px;
+        }
+
+        li{
+            border: 1px solid black;
+            margin: 3px;
+            padding: 3px;
+            background-color: rgba(128, 128, 128, 0.09);
+            border: 1px solid rgba(128, 128, 128, 0.09);
+            border-radius: 5px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div>
+        <h3>My Sticky note</h3> 
+        <textarea  id="note"></textarea>
+        <p><button id="save">save </button></p>
+        <button id="ref">refresh &#8634;</button>
+    </div>
+
+    <section>
+        
+        <ul id="listing">
+            No notes here...
+        </ul>
+    </section>
+
+    <script>
+
+        var note_text = document.getElementById("note");
+        var save_btn = document.getElementById("save");
+        var refresh_btn = document.getElementById("ref");
+        var listbox =  document.getElementById('listing');
+        var note_list_raw = [] ;
+
+        function saveNote (){
+            console.log ('working save btn')
+            note_data = note_text.value
+            let note_id = (Math.random()*100000000000000000000).toString() 
+
+            note_item = {
+                id: note_id,
+                note: note_data,
+            }
+
+            note_list_raw.push (note_item)
+
+            addItemtoList(note_item);
+
+        }
+
+        function refreshData(){
+
+        }
+
+        function removeElement(array, elementToRemove) {
+            array.forEach((item, index) => {
+                if (item === elementToRemove) {
+                    array.splice(index, 1);
+                }
+            });
+            return array;
+        }
+
+        function addItemtoList(note_item){
+
+            if (note_list_raw.length == 1){
+                listbox.innerHTML = '';
+            }
+
+
+            let lst_item = document.createElement("li");
+            lst_item.setAttribute('id', note_item.id)
+
+            let dlt_btn = document.createElement("button");
+            dlt_btn.innerHTML = "x";
+          
+            dlt_btn.onclick =  function(){
+                let crr_note =  this.parentElement
+                console.log(crr_note.id)
+                
+                let i = 0;
+                while (i < note_list_raw.length){
+                    if (crr_note.id.toString() == note_list_raw[i].id.toString()){
+                        removeElement(note_list_raw, note_list_raw[i])
+                    }
+                    i=i+1;
+                }
+
+                if (note_list_raw.length == 0){ listbox.innerHTML = 'no notes found'; }
+                crr_note.remove();
+            }
+
+            let note_ph = document.createElement("p");
+            note_ph.innerHTML = note_item.note;
+
+
+            lst_item.appendChild(dlt_btn);
+            lst_item.appendChild(note_ph)
+
+            listbox.appendChild(lst_item)
+
+            console.log('add item list function executed...')
+        }
+
+        save_btn.addEventListener('click', saveNote);
+
+       
+
+        
+
+
+
+    </script>
+
+</body>
+</html>
